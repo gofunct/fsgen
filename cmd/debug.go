@@ -18,18 +18,27 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"io/ioutil"
 )
 
 func init() {
 	rootCmd.AddCommand(debugCmd)
+	debugCmd.Flags().BoolVar(&write, "write", false, "")
 }
+
+var (
+	write bool
+)
 
 // debugCmd represents the debug command
 var debugCmd = &cobra.Command{
 	Use:   "debug",
 	Short: "A brief description of your command",
 	Run: func(cmd *cobra.Command, args []string) {
-
-		fmt.Println(ToPrettyJson(viper.AllSettings()))
+		if write {
+			debug(cmd.Name(), cmd.UsageString(), ioutil.WriteFile("debug.txt", ToPrettyJson(viper.AllSettings()), 0755))
+		} else {
+			fmt.Println(ToPrettyJsonString(viper.AllSettings()))
+		}
 	},
 }

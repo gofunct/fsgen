@@ -40,9 +40,15 @@ func ProcessAsset(t *template.Template, file *assets.File) {
 }
 
 // toPrettyJson encodes an item into a pretty (indented) JSON string
-func ToPrettyJson(v interface{}) string {
+func ToPrettyJsonString(v interface{}) string {
 	output, _ := json.MarshalIndent(v, "", "  ")
 	return string(output)
+}
+
+// toPrettyJson encodes an item into a pretty (indented) JSON string
+func ToPrettyJson(v interface{}) []byte {
+	output, _ := json.MarshalIndent(v, "", "  ")
+	return output
 }
 
 // Prompt prompts user for input with default value.
