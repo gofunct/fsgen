@@ -17,13 +17,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"io"
-	"io/ioutil"
 	"os"
-	"path/filepath"
-	"strings"
-	"text/template"
 )
 
 // compileCmd represents the compile command
@@ -31,50 +26,11 @@ var compileCmd = &cobra.Command{
 	Use:   "compile",
 	Short: "A brief description of your command",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := filepath.Walk("templates", func(path string, info os.FileInfo, err error) error {
-			if err != nil {
-				debug(path, "walkfunc copy error", err)
-			}
-			if strings.Contains(path, ".tmpl") {
-				b, err := ioutil.ReadFile(path)
-				newt, err := template.New(info.Name()).Parse(string(b))
-				if err != nil {
-					return err
-				}
-
-				f, err := os.Create(outDir+strings.TrimSuffix(info.Name(), ".tmpl"))
-				if err != nil {
-					return err
-				}
-				return newt.Execute(f, viper.AllSettings())
-			}
-			return nil
-		}); err != nil {
-			fatal(cmd.Name(), "failed to walk directory", err)
-		}
+		WalkTemplates("templates")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(compileCmd)
 
-}
-
-func CopyFile(srcfile, dstfile string) (*os.File, error) {
-	srcF, err := os.Open(srcfile) // nolint: gosec
-	if err != nil {
-		return nil, fmt.Errorf("could not open source file: %s", err)
-	}
-	defer srcF.Close()
-
-	dstF, err := os.Create(dstfile)
-	if err != nil {
-		return nil, err
-	}
-
-
-	if _, err = io.Copy(dstF, srcF); err != nil {
-		return nil, fmt.Errorf("could not copy file: %s", err)
-	}
-	return dstF, os.Chmod(dstfile, 0755)
 }

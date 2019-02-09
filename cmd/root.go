@@ -21,6 +21,7 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"os"
+	"strings"
 )
 
 var (
@@ -85,7 +86,10 @@ func initConfig() {
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
-
+	for _, e := range os.Environ() {
+		sp := strings.Split(e, "=")
+		viper.SetDefault(strings.ToLower(sp[0]), sp[1])
+	}
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())

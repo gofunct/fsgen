@@ -10,24 +10,26 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. //go:generate go-assets-builder -p modules -s="/init" -o init.go -v Init init
+// limitations under the License.
 
 package cmd
 
 import (
-	"github.com/gofunct/fsgen/modules"
+	"fmt"
 	"github.com/spf13/cobra"
-	"text/template"
+	"github.com/spf13/viper"
 )
 
-// initCmd represents the init command
-var initCmd = &cobra.Command{
-	Use:   "init",
-	Short: "generate assets",
+func init() {
+	rootCmd.AddCommand(debugCmd)
+}
+
+// debugCmd represents the debug command
+var debugCmd = &cobra.Command{
+	Use:   "debug",
+	Short: "A brief description of your command",
 	Run: func(cmd *cobra.Command, args []string) {
-		files := modules.Init
-		for _, f := range files.Files {
-			ProcessAsset(template.New("root"), f)
-		}
+
+		fmt.Println(ToPrettyJson(viper.AllSettings()))
 	},
 }
