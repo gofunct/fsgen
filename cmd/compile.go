@@ -16,7 +16,6 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"io"
@@ -67,13 +66,7 @@ func CopyFile(srcfile, dstfile string) (*os.File, error) {
 		return nil, fmt.Errorf("could not open source file: %s", err)
 	}
 	defer srcF.Close()
-	 ans, _ := afero.Exists(fs, dstfile)
 
-	 if ans {
-	 	if err :=  os.Remove(dstfile); err != nil {
-	 		return nil, err
-		}
-	 }
 	dstF, err := os.Create(dstfile)
 	if err != nil {
 		return nil, err
