@@ -45,14 +45,13 @@ func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $PWD/.fsgen.yaml)")
 	rootCmd.AddCommand(initCmd)
-	rootCmd.PersistentFlags().StringVarP(&outDir, "output-dir", "o", "gen", "")
+	rootCmd.PersistentFlags().StringVarP(&outDir, "output-dir", "o", "gen/", "")
 	rootCmd.PersistentFlags().StringVarP(&walkDir, "walk-dir", "w", "templates", "")
 	ans, err := fs.Exists(outDir)
 	debug("check if out directory exists", "main.init", err)
 	if !ans {
 		fatal("make all directories if they dont exist", "main.init", os.MkdirAll(outDir, 0755))
 	}
-
 }
 
 // rootCmd represents the base command when called without any subcommands

@@ -36,16 +36,16 @@ var compileCmd = &cobra.Command{
 				debug(path, "walkfunc copy error", err)
 			}
 			if strings.Contains(path, ".tmpl") {
-				f, err := CopyFile(path, outDir+"/"+strings.TrimSuffix(filepath.Base(path), ".tmpl"))
-				if err != nil {
-					return err
-				}
 				b, err := ioutil.ReadFile(path)
 				newt, err := template.New(info.Name()).Parse(string(b))
 				if err != nil {
 					return err
 				}
 
+				f, err := os.Create(outDir+strings.TrimSuffix(info.Name(), ".tmpl"))
+				if err != nil {
+					return err
+				}
 				return newt.Execute(f, viper.AllSettings())
 			}
 			return nil
