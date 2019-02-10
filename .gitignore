@@ -1,3 +1,5 @@
 vendor
 debug.txt
 .idea
+.build-harness
+temp

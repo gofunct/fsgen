@@ -22,7 +22,7 @@ func ProcessAsset(t *template.Template, file *assets.File) {
 	}
 	content := string(file.Data)
 
-	tpl := t.New(file.Name())
+	tpl := t.New(file.Name()).Funcs(sprig.GenericFuncMap())
 	tpl, err := tpl.Parse(string(content))
 	if err != nil {
 		fatal("Could not parse template ", file.Name(), err)

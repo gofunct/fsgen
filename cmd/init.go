@@ -17,6 +17,9 @@ package cmd
 import (
 	"github.com/gofunct/fsgen/modules"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"io/ioutil"
+	"strings"
 	"text/template"
 )
 
@@ -27,6 +30,9 @@ var initCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		files := modules.Init
 		for _, f := range files.Files {
+			b, _ := ioutil.ReadFile("config.yaml")
+			r := strings.NewReader(string(b))
+			_ = viper.ReadConfig(r)
 			ProcessAsset(template.New("root"), f)
 		}
 	},
