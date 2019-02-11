@@ -5,7 +5,7 @@ You can contribute in many ways:
 
 Types of Contributions
 Report Bugs
-Report bugs at https://github.com/{{  .github_username  }}/{{  .app_name  }}/issues.
+Report bugs at https://github.com/{{ .github_username }}/{{ .app_name }}/issues.
 
 If you are reporting a bug, please include:
 
@@ -19,10 +19,10 @@ Implement Features
 Look through the GitHub issues for features. Anything tagged with "feature" is open to whoever wants to implement it.
 
 Write Documentation
-{{  .app_name  }} could always use more documentation, whether as part of the official {{  .app_name  }} docs, in docstrings, or even on the web in blog posts, articles, and such.
+{{ .app_name }} could always use more documentation, whether as part of the official {{ .app_name }} docs, in docstrings, or even on the web in blog posts, articles, and such.
 
 Submit Feedback
-The best way to send feedback is to file an issue at https://github.com/{{  .github_username  }}/{{  .app_name  }}/issues.
+The best way to send feedback is to file an issue at https://github.com/{{ .github_username }}/{{ .app_name }}/issues.
 
 If you are proposing a feature:
 
@@ -30,11 +30,11 @@ Explain in detail how it would work.
 Keep the scope as narrow as possible, to make it easier to implement.
 Remember that this is a volunteer-driven project, and that contributions are welcome :)
 Get Started!
-Ready to contribute? Here's how to set up {{  .app_name  }} for local development.
+Ready to contribute? Here's how to set up {{ .app_name }} for local development.
 
-Fork the {{  .app_name  }} repo on GitHub.
+Fork the {{ .app_name }} repo on GitHub.
 Clone your fork locally::
-    $ git clone git@github.com:your_name_here/{{  .app_name  }}.git
+    $ git clone git@github.com:your_name_here/{{ .app_name }}.git
 Create a branch for local development::
     $ git checkout -b name-of-your-bugfix-or-feature
 Now you can make your changes locally.

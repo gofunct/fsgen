@@ -16,47 +16,37 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/afero"
+	"github.com/gofunct/fsgen/pkg"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	"go.uber.org/zap"
 	"os"
-	"strings"
 )
 
-var (
-	l, _  = zap.NewDevelopment()
-	fatal = func(prefix string, msg string, err error) {
-		l.Fatal(msg, zap.Namespace(prefix), zap.Error(err))
-	}
-	debug = func(prefix string, msg string, err error) {
-		l.Debug(msg, zap.Namespace(prefix), zap.Error(err))
-	}
-	cfgFile string
-	outDir  string
-	walkDir string
+type Config struct {
+	ConfigPath string
+	OutputDir  string
+	TmplDir    string
+}
 
-	fs = afero.Afero{
-		afero.NewOsFs(),
-	}
-)
+var V = pkg.NewViper()
+
+var C *Config
 
 func init() {
-	zap.ReplaceGlobals(l)
-	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $PWD/.fsgen.yaml)")
-	rootCmd.AddCommand(initCmd)
-	rootCmd.PersistentFlags().StringVarP(&outDir, "output-dir", "o", ".", "")
-	rootCmd.PersistentFlags().StringVarP(&walkDir, "walk-dir", "w", "templates", "")
+	{
+		rootCmd.AddCommand(initCmd)
+	}
+	{
+		rootCmd.PersistentFlags().StringVar(V.StringVarP(&C.ConfigPath, "p", ".", true, "FSGEN", "path to your config file:"))
+		rootCmd.PersistentFlags().StringVar(V.StringVarP(&C.OutputDir, "o", "gen", true, "FSGEN", "path to target output directory:"))
+		rootCmd.PersistentFlags().StringVar(V.StringVarP(&C.TmplDir, "t", "templates", true, "FSGEN", "path to your template directory:"))
+
+	}
 }
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "fsgen",
 	Short: "generate static assets for http.Filesystem",
-	PersistentPostRun: func(cmd *cobra.Command, args []string) {
-
-	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -65,28 +55,5 @@ func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
-	}
-}
-
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
-
-		// Search config in home directory with name ".temp" (without extension).
-		viper.AddConfigPath(os.Getenv("PWD"))
-		viper.SetConfigName(".fsgen")
-	}
-
-	viper.AutomaticEnv() // read in environment variables that match
-	for _, e := range os.Environ() {
-		sp := strings.Split(e, "=")
-		viper.SetDefault(strings.ToLower(sp[0]), sp[1])
-	}
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 }

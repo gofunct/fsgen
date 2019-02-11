@@ -16,24 +16,31 @@ package cmd
 
 import (
 	"github.com/gofunct/fsgen/modules"
+	"github.com/gofunct/fsgen/pkg"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	"io/ioutil"
-	"strings"
 	"text/template"
 )
+
+type project struct {
+	Contributors []string
+	GHUserName   string
+	Description  string
+	DHUserName   string
+	BaseImage    string
+	BuildImage   string
+}
+
+var Project *project
 
 // initCmd represents the init command
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "generate assets",
+	Short: "generate initial project assets",
 	Run: func(cmd *cobra.Command, args []string) {
 		files := modules.Init
+		pkg.L.WarnIfErr(V.ReadInConfig(), V.ConfigFileUsed(), "failed to read in config")
 		for _, f := range files.Files {
-			b, _ := ioutil.ReadFile("config.yaml")
-			r := strings.NewReader(string(b))
-			_ = viper.ReadConfig(r)
-			ProcessAsset(template.New("root"), f)
+			V.ProcessAsset(template.New("root"), f)
 		}
 	},
 }

@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/gofunct/fsgen/pkg"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"io/ioutil"
@@ -36,9 +37,9 @@ var debugCmd = &cobra.Command{
 	Short: "A brief description of your command",
 	Run: func(cmd *cobra.Command, args []string) {
 		if write {
-			debug(cmd.Name(), cmd.UsageString(), ioutil.WriteFile("debug.txt", ToPrettyJson(viper.AllSettings()), 0755))
+			pkg.L.FatalIfErr(ioutil.WriteFile("debug.txt", pkg.ToPrettyJson(viper.AllSettings()), 0755), cmd.UsageString(), "failed to write debug.txt file")
 		} else {
-			fmt.Println(ToPrettyJsonString(viper.AllSettings()))
+			fmt.Println(pkg.ToPrettyJsonString(viper.AllSettings()))
 		}
 	},
 }

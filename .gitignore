@@ -1,5 +1,6 @@
 vendor
-debug.txt
+bin
 .idea
-.build-harness
-temp
+*.pem
+e
+debug.txt
